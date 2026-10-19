@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Neli-Rose App</string>
+    <string name="header_title">Neli-Rose</string>
+    <string name="header_subtitle">Where Care is Always Near</string>
+    <string name="good_morning">Good morning</string>
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="all_vitals_checked">All vitals checked (Tap to edit)</string>
+    <string name="meds_today">Meds Today</string>
+    <string name="activities">Activities</string>
+    <string name="emergency">Emergency</string>
+    <string name="call_caregiver">Call Caregiver Now</string>
+    <string name="share_location">Share My Location</string>
+    <string name="next_reminder">Next Reminder</string>
+    <string name="afternoon_medication">Afternoon Medication</string>
+    <string name="quick_call">Quick Call</string>
+    <string name="add_new_contact">Add New Contact</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="send_message">Send Message</string>
+    <string name="save_vitals">Save Vitals</string>
+    <string name="vitals_saved">Vitals saved successfully!</string>
+</resources>

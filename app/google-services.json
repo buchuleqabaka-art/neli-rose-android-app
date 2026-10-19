@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "487739624548",
+    "project_id": "neli-rose-c96ef",
+    "storage_bucket": "neli-rose-c96ef.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487739624548:android:c64d08b6e604d89fede371",
+        "android_client_info": {
+          "package_name": "com.example.neli_roseapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgzN8OiOXE07xxYR55ypj1EJxGCRqVNZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487739624548:android:c64d08b6e604d89fede371",
+        "android_client_info": {
+          "package_name": "NeliRose.RetirementHome"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgzN8OiOXE07xxYR55ypj1EJxGCRqVNZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

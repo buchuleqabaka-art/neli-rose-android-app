@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="neli_green">#0F3A13</color>
+    <color name="neli_green_dark">#08230B</color>
+    <color name="neli_cream">#EBE2D5</color>
+    <color name="neli_card_bg">#FFFFFF</color>
+    <color name="neli_grey">#BDBDBD</color>
+    <color name="neli_light_green">#A2DBA0</color>
+    <color name="neli_box_bg">#D4DDD4</color>
+    <color name="neli_text_dark">#111111</color>
+    <color name="neli_text_hint">#444444</color>
+</resources>

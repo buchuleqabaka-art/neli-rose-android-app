@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Blue Outer Curved Arc/Swoosh 1 -->
+    <path
+        android:fillColor="#00B0FF"
+        android:pathData="M15,82 C5,55 12,28 35,12 C20,28 15,50 30,72 C22,78 18,81 15,82 Z" />
+
+    <!-- Blue Inner Curved Arc/Swoosh 2 -->
+    <path
+        android:fillColor="#40C4FF"
+        android:pathData="M28,88 C18,65 24,40 45,25 C32,40 28,60 42,78 C35,84 31,87 28,88 Z" />
+
+    <!-- Blue Light Curved Arc/Swoosh 3 -->
+    <path
+        android:fillColor="#80D8FF"
+        android:pathData="M40,94 C30,75 35,52 55,38 C44,52 40,70 52,85 C46,90 43,92 40,94 Z" />
+
+    <!-- Pink Rose Stem & Leaf -->
+    <path
+        android:fillColor="#FF1493"
+        android:pathData="M52,95 L50,95 C48,72 40,55 32,38 C34,36 36,38 38,40 C44,55 50,70 52,95 Z" />
+
+    <!-- Rose Leaf Right -->
+    <path
+        android:fillColor="#FF00A0"
+        android:pathData="M43,50 C48,45 56,44 60,48 C54,54 46,55 43,50 Z" />
+
+    <!-- Pink Rose Flower Center Petals -->
+    <path
+        android:fillColor="#FF00A0"
+        android:pathData="M32,38 C22,32 20,20 30,12 C42,10 48,22 42,32 C38,38 34,38 32,38 Z" />
+
+    <!-- Inner Spiral Petals -->
+    <path
+        android:fillColor="#FF69B4"
+        android:pathData="M32,25 C28,20 30,15 35,14 C40,15 42,20 38,24 C35,27 33,26 32,25 Z" />
+
+    <!-- Flower Outer Accent Lines -->
+    <path
+        android:fillColor="#FFB6C1"
+        android:pathData="M28,20 C26,24 28,28 32,30 C30,26 29,22 28,20 Z" />
+</vector>
