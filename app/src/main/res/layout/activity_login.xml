@@ -141,6 +141,21 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:cornerRadius="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogleSignIn"
+                android:layout_width="220dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@android:color/white"
+                android:text="Sign in with Google"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:strokeColor="@color/neli_green"
+                app:strokeWidth="1dp"
+                app:cornerRadius="0dp" />
         </LinearLayout>
 
         <!-- sign up link -->

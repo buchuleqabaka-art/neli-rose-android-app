@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        FcmHelper.createChannel(this)
+        FcmHelper.registerDevice()
+
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle)
         tvHeaderSubtitle = findViewById(R.id.tvHeaderSubtitle)
         btnHeaderBack = findViewById(R.id.btnHeaderBack)
