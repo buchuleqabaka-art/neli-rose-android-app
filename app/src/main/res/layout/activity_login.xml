@@ -14,11 +14,13 @@
         <!-- green header -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
             android:background="@color/neli_green"
             android:gravity="center"
+            android:minHeight="220dp"
             android:orientation="vertical"
-            android:paddingTop="24dp">
+            android:paddingTop="24dp"
+            android:paddingBottom="16dp">
 
             <ImageView
                 android:layout_width="64dp"
@@ -76,9 +78,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                android:labelFor="@+id/etEmail"
+                android:text="Email address"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
@@ -91,17 +95,20 @@
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email address"
-                    android:inputType="textEmailAddress" />
+                    android:hint="name@example.com"
+                    android:inputType="textEmailAddress"
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:labelFor="@+id/etPassword"
                 android:text="Password"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPassword"
@@ -115,7 +122,8 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -124,17 +132,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="4dp"
-                android:padding="4dp"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:text="Forgot Password?"
                 android:textColor="@color/neli_green"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
-                android:layout_width="220dp"
-                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
+                android:minHeight="56dp"
                 android:backgroundTint="@color/neli_green"
                 android:text="Log In"
                 android:textColor="@android:color/white"
@@ -144,10 +157,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoogleSignIn"
-                android:layout_width="220dp"
-                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="12dp"
+                android:minHeight="56dp"
                 android:backgroundTint="@android:color/white"
                 android:text="Sign in with Google"
                 android:textColor="@android:color/black"
@@ -178,7 +192,10 @@
                 android:id="@+id/tvSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
+                android:gravity="center"
+                android:minWidth="96dp"
+                android:minHeight="48dp"
+                android:padding="8dp"
                 android:text="Sign Up"
                 android:textColor="@color/neli_green"
                 android:textSize="18sp"

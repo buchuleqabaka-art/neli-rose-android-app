@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/neli_cream"
@@ -23,40 +22,38 @@
 
             <TextView
                 android:id="@+id/tvGreeting"
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Good morning"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="Good morning" />
 
             <TextView
                 android:id="@+id/tvDate"
+                style="@style/NeliBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
+                android:layout_marginTop="6dp" />
 
+            <!-- Shows whether vitals were recorded today. Tapping it opens the Health screen. -->
             <TextView
-                android:id="@+id/tvVitalsCheckedBadge"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvVitalsStatus"
+                style="@style/NeliLabel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/neli_light_green"
+                android:layout_marginTop="12dp"
+                android:background="@color/neli_grey"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingStart="20dp"
+                android:gravity="center_vertical"
+                android:minHeight="56dp"
+                android:paddingStart="16dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="20dp"
+                android:paddingEnd="16dp"
                 android:paddingBottom="8dp"
-                android:text="All vitals checked (Tap to edit)"
-                android:textColor="@color/neli_green"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="Checking your vitals..." />
         </LinearLayout>
 
-        <!-- Stat Cards Row -->
+        <!-- Stat Cards Row: both numbers are counted from the saved records -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,10 +61,10 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
 
-            <!-- Stat 1: Meds -->
+            <!-- Stat 1: medicines taken today -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_card"
@@ -75,59 +72,29 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvStatMedsCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/btnMedsMinus"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@color/neli_light_green"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@color/neli_green"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvStatMedsCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="3"
-                        android:textColor="@color/neli_green"
-                        android:textSize="32sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/btnMedsPlus"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@color/neli_light_green"
-                        android:gravity="center"
-                        android:text="+"
-                        android:textColor="@color/neli_green"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:text="-"
+                    android:textColor="@color/neli_green"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvStatMedsLabel"
+                    style="@style/NeliBody"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Meds Today"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:gravity="center"
+                    android:text="Medicines taken today" />
             </LinearLayout>
 
-            <!-- Stat 2: Activities -->
+            <!-- Stat 2: activities joined -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_card"
@@ -135,53 +102,23 @@
                 android:orientation="vertical"
                 android:padding="12dp">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvStatActivitiesCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/btnActivitiesMinus"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@color/neli_grey"
-                        android:gravity="center"
-                        android:text="-"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvStatActivitiesCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="2"
-                        android:textColor="@android:color/black"
-                        android:textSize="32sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/btnActivitiesPlus"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@color/neli_grey"
-                        android:gravity="center"
-                        android:text="+"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:text="-"
+                    android:textColor="@android:color/black"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvStatActivitiesLabel"
+                    style="@style/NeliBody"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Activities"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:gravity="center"
+                    android:text="Activities joined" />
             </LinearLayout>
         </LinearLayout>
 
@@ -195,48 +132,38 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Emergency"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:text="Emergency" />
 
             <TextView
+                android:id="@+id/tvCaregiverName"
+                style="@style/NeliBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="Press the button below to alert your caregiver immediately"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:text="Press the button below to call your caregiver" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCallCaregiver"
+                style="@style/NeliButtonAlert"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="#FFFF7070"
-                android:text="Call Caregiver Now"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:cornerRadius="0dp" />
+                android:text="Call Caregiver Now" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnShareLocation"
+                style="@style/NeliButton"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:backgroundTint="@color/neli_light_green"
                 android:text="Share My Location"
-                android:textColor="@color/neli_green"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:cornerRadius="0dp" />
+                android:textColor="@color/neli_green" />
         </LinearLayout>
 
-        <!-- Next Reminder Card -->
+        <!-- Next Reminder Card: filled in from today's unfinished medicines and schedule events -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -246,51 +173,49 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next Reminder"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:text="Next Reminder" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvReminderTitle"
+                    style="@style/NeliLabel"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:text="Afternoon Medication"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_weight="1"
+                    android:text="Checking..." />
 
                 <TextView
                     android:id="@+id/tvReminderIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="12dp"
                     android:background="@color/neli_light_green"
                     android:paddingStart="16dp"
-                    android:paddingTop="4dp"
+                    android:paddingTop="6dp"
                     android:paddingEnd="16dp"
-                    android:paddingBottom="4dp"
-                    android:text="2h"
+                    android:paddingBottom="6dp"
+                    android:text="-"
                     android:textColor="@color/neli_green"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvReminderDetail"
+                style="@style/NeliBody"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="2 tablet at 14:00"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:layout_marginTop="6dp" />
         </LinearLayout>
 
     </LinearLayout>

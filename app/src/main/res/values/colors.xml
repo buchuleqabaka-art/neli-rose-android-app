@@ -9,4 +9,7 @@
     <color name="neli_box_bg">#D4DDD4</color>
     <color name="neli_text_dark">#111111</color>
     <color name="neli_text_hint">#444444</color>
+    <color name="neli_alert">#FFFF7070</color>
+    <color name="neli_pending_bg">#FFFF9B9B</color>
+    <color name="neli_pending_text">#FFD50000</color>
 </resources>

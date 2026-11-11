@@ -7,7 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -27,9 +27,12 @@ import com.google.android.material.button.MaterialButton
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
-        // TODO: replace with the real Neli-Rose coordinates (right-click the building in Google Maps)
-        private val HOME = LatLng(-26.2041, 28.0473)
+        // Neli-Rose Retirement Home, 39 Rooihaaskoppie Avenue, East Lynne, Pretoria.
+        // The position comes from a public directory listing of the home. It still has to be
+        // confirmed by the team against the building in Google Maps (press and hold on the building).
+        private val HOME = LatLng(-25.70374, 28.2741)
         private const val HOME_NAME = "Neli-Rose Retirement Home"
+        private const val HOME_ADDRESS = "39 Rooihaaskoppie Avenue, East Lynne, Pretoria"
     }
 
     private var map: GoogleMap? = null
@@ -53,7 +56,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
 
-        findViewById<ImageView>(R.id.btnMapBack).setOnClickListener { finish() }
+        findViewById<View>(R.id.btnMapBack).setOnClickListener { finish() }
         findViewById<MaterialButton>(R.id.btnDirections).setOnClickListener { openDirections() }
         findViewById<MaterialButton>(R.id.btnMapShare).setOnClickListener { shareLocation() }
 
@@ -67,7 +70,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.uiSettings.isZoomControlsEnabled = true
 
         // marker + camera on Neli-Rose
-        googleMap.addMarker(MarkerOptions().position(HOME).title(HOME_NAME))
+        googleMap.addMarker(MarkerOptions().position(HOME).title(HOME_NAME).snippet(HOME_ADDRESS))
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(HOME, 15f))
 
         if (hasLocationPermission()) {

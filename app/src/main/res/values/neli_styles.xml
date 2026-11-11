@@ -11,4 +11,65 @@
         <item name="boxCornerRadiusBottomEnd">0dp</item>
         <item name="hintEnabled">false</item>
     </style>
+
+    <!--
+        Shared text and button looks. Sizes are in sp, so they follow the phone's font-size
+        setting, and heights are minimums, so a box or button grows instead of cutting text off.
+        The colours are the existing Neli-Rose colours.
+    -->
+    <style name="NeliCardTitle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="NeliLabel">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="NeliBody">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="NeliInput">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColorHint">@color/neli_text_hint</item>
+        <item name="android:background">@color/neli_light_green</item>
+    </style>
+
+    <style name="NeliInputGrey" parent="NeliInput">
+        <item name="android:background">@color/neli_grey</item>
+    </style>
+
+    <style name="NeliButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="backgroundTint">@color/neli_light_green</item>
+        <item name="cornerRadius">0dp</item>
+    </style>
+
+    <style name="NeliButtonPrimary" parent="NeliButton">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">@color/neli_green</item>
+    </style>
+
+    <style name="NeliButtonGrey" parent="NeliButton">
+        <item name="backgroundTint">@color/neli_grey</item>
+    </style>
+
+    <style name="NeliButtonAlert" parent="NeliButton">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">@color/neli_alert</item>
+    </style>
 </resources>

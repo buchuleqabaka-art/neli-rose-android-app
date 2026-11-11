@@ -21,15 +21,26 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 class SignUpActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "SignUp"
+        // how long to wait for the profile to be stored online before moving on
+        private const val PROFILE_SAVE_WAIT_MS = 10_000L
+    }
+
     private var auth: FirebaseAuth? = null
+
+    // set once the sign-up has moved on to the login screen, so it cannot happen twice
+    private var signUpFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,13 +105,14 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Save user profile locally
-            DataManager.saveUserProfile(this, name, phone, email)
-
+            // Without Firebase no account can be created, so no success is shown
             val firebaseAuth = auth
             if (firebaseAuth == null) {
-                Toast.makeText(this, "Account created successfully! Please log in.", Toast.LENGTH_LONG).show()
-                goToLogin()
+                Toast.makeText(
+                    this,
+                    "Accounts cannot be created right now. Please try again later.",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
             }
 
@@ -109,33 +121,14 @@ class SignUpActivity : AppCompatActivity() {
 
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val user = firebaseAuth.currentUser
-                        if (user != null) {
-                            // save the name on the auth profile
-                            val profile = UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build()
-                            user.updateProfile(profile)
-
-                            // save name + phone in Firestore under the user's id
-                            val data = hashMapOf(
-                                "fullName" to name,
-                                "phone" to phone,
-                                "email" to email
-                            )
-                            runCatching {
-                                FirebaseFirestore.getInstance()
-                                    .collection("users")
-                                    .document(user.uid)
-                                    .set(data)
-                                    .addOnFailureListener { e ->
-                                        Log.w("SignUp", "Could not save profile", e)
-                                    }
-                            }
-                        }
-                        Toast.makeText(this, "Account created successfully! Please log in.", Toast.LENGTH_LONG).show()
-                        goToLogin()
+                    val user = if (task.isSuccessful) firebaseAuth.currentUser else null
+                    if (user != null) {
+                        // The account now exists. Only now is the profile saved.
+                        val profile = UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build()
+                        user.updateProfile(profile)
+                        saveProfileThenFinish(user, name, phone, email)
                     } else {
                         btnCreate.isEnabled = true
                         btnCreate.text = "Create Account"
@@ -147,10 +140,9 @@ class SignUpActivity : AppCompatActivity() {
                         } else if (excMessage.contains("CONFIGURATION_NOT_FOUND", ignoreCase = true)) {
                             Toast.makeText(
                                 this,
-                                "Account created successfully! Please log in.",
+                                "Email sign-up is not switched on for this app yet. Please tell the Neli-Rose team.",
                                 Toast.LENGTH_LONG
                             ).show()
-                            goToLogin()
                         } else {
                             Toast.makeText(
                                 this,
@@ -207,26 +199,10 @@ class SignUpActivity : AppCompatActivity() {
                 if (firebaseAuth != null) {
                     firebaseAuth.signInWithCredential(firebaseCredential)
                         .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val user = firebaseAuth.currentUser
-                                if (user != null) {
-                                    val name = user.displayName ?: user.email?.substringBefore("@") ?: "User"
-                                    val email = user.email ?: ""
-                                    DataManager.saveUserProfile(this, name, "", email)
-
-                                    val data = hashMapOf(
-                                        "fullName" to name,
-                                        "email" to email
-                                    )
-                                    runCatching {
-                                        FirebaseFirestore.getInstance()
-                                            .collection("users")
-                                            .document(user.uid)
-                                            .set(data, SetOptions.merge())
-                                    }
-                                }
+                            val user = if (task.isSuccessful) firebaseAuth.currentUser else null
+                            if (user != null) {
                                 Toast.makeText(this, "Google Sign-In successful!", Toast.LENGTH_SHORT).show()
-                                goToMain()
+                                openHomeFor(user)
                             } else {
                                 Toast.makeText(this, "Authentication failed: ${task.exception?.localizedMessage}", Toast.LENGTH_LONG).show()
                             }
@@ -239,6 +215,79 @@ class SignUpActivity : AppCompatActivity() {
             }
         } else {
             Toast.makeText(this, "Unexpected credential type", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Runs after Firebase has created the account: keeps the profile on the phone, stores it online
+     * and waits for that to be confirmed (or to fail) before going to the login screen.
+     */
+    private fun saveProfileThenFinish(user: FirebaseUser, name: String, phone: String, email: String) {
+        lifecycleScope.launch {
+            try {
+                DataManager.saveUserProfile(this@SignUpActivity, name, phone, email)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w(TAG, "Could not keep the profile on this phone", e)
+            }
+
+            val firestore = runCatching { FirebaseFirestore.getInstance() }.getOrNull()
+            if (firestore == null) {
+                finishSignUp(savedOnline = false)
+                return@launch
+            }
+
+            // save name + phone in Firestore under the user's id
+            val data = hashMapOf(
+                "fullName" to name,
+                "phone" to phone,
+                "email" to email
+            )
+            firestore.collection("users")
+                .document(user.uid)
+                .set(data)
+                .addOnCompleteListener { writeTask ->
+                    if (!writeTask.isSuccessful) Log.w(TAG, "Could not save profile online", writeTask.exception)
+                    finishSignUp(savedOnline = writeTask.isSuccessful)
+                }
+
+            // with no connection the write never reports back, so stop waiting after a while
+            window.decorView.postDelayed({ finishSignUp(savedOnline = false) }, PROFILE_SAVE_WAIT_MS)
+        }
+    }
+
+    private fun finishSignUp(savedOnline: Boolean) {
+        if (signUpFinished || isFinishing) return
+        signUpFinished = true
+        val message = if (savedOnline) {
+            "Account created successfully! Please log in."
+        } else {
+            "Account created. Your details are kept on this phone but are not stored online yet. Please log in."
+        }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        goToLogin()
+    }
+
+    /** Google sign-up: the account is signed in, so store what Google gave us and open the home screen. */
+    private fun openHomeFor(user: FirebaseUser) {
+        val name = user.displayName ?: user.email?.substringBefore("@") ?: "User"
+        val email = user.email ?: ""
+        runCatching {
+            FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(user.uid)
+                .set(hashMapOf("fullName" to name, "email" to email), SetOptions.merge())
+        }
+        lifecycleScope.launch {
+            try {
+                DataManager.ensureUserProfile(this@SignUpActivity, name, email)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.w(TAG, "Could not keep the profile on this phone", e)
+            }
+            goToMain()
         }
     }
 

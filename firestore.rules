@@ -1,0 +1,55 @@
+// Firestore security rules for the Neli-Rose app.
+//
+// These rules are NOT applied automatically. Copy them into the Firebase console
+// (Firestore Database > Rules) and press Publish.
+//
+// What they allow:
+//   users/{id}              each person reads and updates only their own profile.
+//                           The "role" field cannot be set or changed from the app.
+//   activityRequests/{id}   a resident creates requests in their own name and reads their own.
+//                           Accounts with role "caregiver" read all requests and can mark
+//                           them as seen. Nobody can delete a request from the app.
+//
+// To make an account a caregiver: Firestore Database > Data > users > that person's document,
+// add the field  role  (string) with the value  caregiver .
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isCaregiver() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'caregiver';
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && !('role' in request.resource.data);
+
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.get('role', null) == resource.data.get('role', null);
+    }
+
+    match /activityRequests/{requestId} {
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending';
+
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isCaregiver());
+
+      allow update: if isCaregiver()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'seenBy', 'seenAt']);
+
+      allow delete: if false;
+    }
+  }
+}

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/neli_cream"
@@ -23,41 +22,56 @@
             <TextView
                 android:id="@+id/tvFilterAll"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:background="@color/neli_light_green"
+                android:clickable="true"
+                android:contentDescription="Show all activities"
+                android:focusable="true"
                 android:gravity="center"
+                android:minHeight="56dp"
+                android:padding="4dp"
                 android:text="All"
                 android:textColor="@android:color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvFilterJoined"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:background="@android:color/white"
+                android:clickable="true"
+                android:contentDescription="Show activities you joined"
+                android:focusable="true"
                 android:gravity="center"
+                android:minHeight="56dp"
+                android:padding="4dp"
                 android:text="Joined"
                 android:textColor="@android:color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvFilterAvailable"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
                 android:background="@android:color/white"
+                android:clickable="true"
+                android:contentDescription="Show activities you have not joined"
+                android:focusable="true"
                 android:gravity="center"
+                android:minHeight="56dp"
+                android:padding="4dp"
                 android:text="Available"
                 android:textColor="@android:color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -71,12 +85,10 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Happening Today"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="Happening Today" />
 
             <LinearLayout
                 android:id="@+id/containerActivitiesToday"
@@ -96,44 +108,36 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coming Up this Week"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="Coming Up this Week" />
 
             <TextView
+                style="@style/NeliLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Art Workshop"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="Art Workshop" />
 
             <TextView
+                style="@style/NeliBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wed 10:00-11:30"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:text="Wed 10:00-11:30" />
 
             <TextView
+                style="@style/NeliLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Game Night"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="Game Night" />
 
             <TextView
+                style="@style/NeliBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fri 19:00-21:00"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:text="Fri 19:00-21:00" />
         </LinearLayout>
 
         <!-- Request an Activity Card -->
@@ -146,62 +150,74 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Request an activity"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="Request an activity" />
 
             <TextView
+                style="@style/NeliLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="What would you like to do?"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:labelFor="@+id/etActivityRequest"
+                android:text="What would you like to do?" />
 
             <EditText
                 android:id="@+id/etActivityRequest"
+                style="@style/NeliInputGrey"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:background="@color/neli_grey"
                 android:hint="Type your request"
-                android:inputType="text"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textSize="14sp" />
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="300" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnActivityDate"
+                style="@style/NeliButtonGrey"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Preferred date"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/tvActivityDate"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="6dp"
-                android:background="@color/neli_grey"
-                android:gravity="center"
-                android:text="Select Date"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
+                android:text="Choose a preferred day (optional)" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendActivityRequest"
+                style="@style/NeliButton"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="@color/neli_light_green"
-                android:text="Send Request"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Send Request" />
+        </LinearLayout>
+
+        <!-- My Requests Card: what was sent and whether the care team has seen it -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/NeliCardTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My requests" />
+
+            <TextView
+                android:id="@+id/tvRequestsEmpty"
+                style="@style/NeliBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="You have not sent any requests yet." />
+
+            <LinearLayout
+                android:id="@+id/containerMyRequests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
         </LinearLayout>
 
     </LinearLayout>

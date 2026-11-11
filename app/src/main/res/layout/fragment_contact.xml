@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/neli_cream"
@@ -12,7 +11,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Quick Call Card -->
+        <!-- Quick Call Card: the person's own contacts -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,19 +21,24 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quick Call"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="Quick Call" />
+
+            <TextView
+                android:id="@+id/tvContactsEmpty"
+                style="@style/NeliBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="No contacts yet. Add one below." />
 
             <!-- Dynamic Contacts Container -->
             <LinearLayout
                 android:id="@+id/containerQuickCall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:orientation="vertical" />
         </LinearLayout>
 
@@ -48,47 +52,54 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add New Contact"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="Add New Contact" />
+
+            <TextView
+                style="@style/NeliLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:labelFor="@+id/etNewContactName"
+                android:text="Name" />
 
             <EditText
                 android:id="@+id/etNewContactName"
+                style="@style/NeliInputGrey"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/neli_grey"
-                android:hint="Contact Name (e.g. Daughter / Next of Kin)"
-                android:inputType="textPersonName"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textSize="14sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="for example Sarah (daughter)"
+                android:inputType="textPersonName|textCapWords"
+                android:maxLength="60" />
+
+            <TextView
+                style="@style/NeliLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:labelFor="@+id/etNewContactPhone"
+                android:text="Phone number" />
 
             <EditText
                 android:id="@+id/etNewContactPhone"
+                style="@style/NeliInputGrey"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/neli_grey"
-                android:hint="Phone Number (e.g. +27 82 123 4567)"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:hint="for example +27 82 123 4567"
                 android:inputType="phone"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textSize="14sp" />
+                android:maxLength="20" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddContact"
+                style="@style/NeliButton"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:backgroundTint="@color/neli_light_green"
-                android:text="Add Contact"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                android:text="Add Contact" />
         </LinearLayout>
 
         <!-- Send a Message Card -->
@@ -101,83 +112,62 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send a Message"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="Send a Message" />
 
             <TextView
+                style="@style/NeliLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Select Contact"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:text="Send to" />
 
             <Spinner
                 android:id="@+id/spinnerContactPeople"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:background="@color/neli_grey"
+                android:contentDescription="Choose who to message"
+                android:minHeight="56dp"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp" />
 
             <TextView
+                style="@style/NeliLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Quick Message"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:text="Message" />
 
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuickMsg1"
+                style="@style/NeliButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:text="I'm doing well" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnQuickMsg1"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/neli_light_green"
-                    android:text="I'm doing well"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    app:cornerRadius="0dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnQuickMsg2"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/neli_light_green"
-                    android:text="Please call me"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp"
-                    app:cornerRadius="0dp" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuickMsg2"
+                style="@style/NeliButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Please call me" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSendMessage"
+                style="@style/NeliButtonPrimary"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:backgroundTint="@color/neli_light_green"
-                android:text="Send Message"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                android:text="Send Message" />
         </LinearLayout>
 
-        <!-- Caregiver on Duty Card -->
+        <!-- My Caregiver Card: the contact the person chose, not a fixed number -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -187,39 +177,33 @@
             android:padding="16dp">
 
             <TextView
+                style="@style/NeliCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Caregiver on Duty"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:text="My Caregiver" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvCaregiverCardName"
+                style="@style/NeliLabel"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Nurse Thandi Dlamini"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="No caregiver chosen yet" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvCaregiverCardHint"
+                style="@style/NeliBody"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="On shift until 20:00"
-                android:textColor="@android:color/black"
-                android:textSize="13sp" />
+                android:text="Choose one in the Quick Call list with the button &quot;Set as my caregiver&quot;." />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCallNurse"
+                android:id="@+id/btnCallCaregiverCard"
+                style="@style/NeliButtonGrey"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:backgroundTint="@color/neli_grey"
-                android:text="Call Nurse Thandi"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                android:text="Call my caregiver" />
         </LinearLayout>
 
     </LinearLayout>

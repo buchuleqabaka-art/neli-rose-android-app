@@ -6,31 +6,92 @@
     android:background="@color/neli_cream"
     android:orientation="vertical">
 
-    <!-- Green Top Header Bar -->
-    <RelativeLayout
+    <!-- Green Top Header Bar. Each action has an icon and a word, and the bar grows with large text. -->
+    <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:background="@color/neli_green"
-        android:paddingStart="16dp"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:minHeight="120dp"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
         android:paddingTop="32dp"
-        android:paddingEnd="16dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="12dp">
 
-        <ImageView
-            android:id="@+id/btnHeaderBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="Back"
-            android:src="@drawable/ic_back_triangle"
-            android:visibility="gone" />
-
-        <LinearLayout
+        <!-- Left slot: Back on the inner screens, Profile on Home -->
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:minWidth="76dp">
+
+            <LinearLayout
+                android:id="@+id/btnHeaderBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="Back to Home"
+                android:focusable="true"
+                android:gravity="center"
+                android:minWidth="64dp"
+                android:minHeight="56dp"
+                android:orientation="vertical"
+                android:padding="4dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_back_triangle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnHeaderProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:contentDescription="Profile and settings"
+                android:focusable="true"
+                android:gravity="center"
+                android:minWidth="64dp"
+                android:minHeight="56dp"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_profile" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Logo and title -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -52,9 +113,10 @@
                     android:id="@+id/tvHeaderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="Neli-Rose"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -62,6 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:gravity="center"
                     android:text="Where Care is Always Near"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
@@ -69,15 +132,35 @@
             </LinearLayout>
         </LinearLayout>
 
-        <ImageView
+        <!-- Right slot: Log out (Home only) -->
+        <LinearLayout
             android:id="@+id/btnHeaderLogout"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="Log Out"
-            android:src="@drawable/ic_logout" />
-    </RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="Log out"
+            android:focusable="true"
+            android:gravity="center"
+            android:minWidth="76dp"
+            android:minHeight="56dp"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_logout" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log out"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- Content Fragment Container -->
     <FrameLayout
@@ -86,7 +169,7 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar: the word under each icon is always shown -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
@@ -94,5 +177,6 @@
         android:background="@color/neli_green"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@android:color/white"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 </LinearLayout>

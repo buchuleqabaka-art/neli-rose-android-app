@@ -43,6 +43,14 @@
             android:name=".MapActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".CareRequestsActivity"
+            android:exported="false" />
+
         <service
             android:name=".NeliMessagingService"
             android:exported="false">

@@ -31,38 +31,47 @@ Built by the **Ambitious Developers** student group as part of the Neli-Rose Res
 - Google sign-in (Credential Manager)
 - Forgot-password email reset
 - Stays logged in between launches
-- Profile (name, phone, email) saved to Firestore on sign-up
+- Profile (name, phone, email) saved to Firestore once the account has been created
+- Nobody reaches the home screen without a successful Firebase sign-in, and a failed sign-up or password reset is reported as a failure
 
 ### Home
 - Time-based greeting and today's date
-- Medication and activity counters
-- Vitals status badge (tap to jump to the Health tab)
-- Next reminder countdown
-- **Call Caregiver Now** opens the dialer
-- **Share My Location** sends a Google Maps link through any app
+- Medicines taken today and activities joined, counted from the saved records
+- Vitals status for today (tap to jump to the Health tab)
+- Next reminder, worked out from today's unfinished medicines and schedule events
+- **Call Caregiver Now** calls the contact the resident chose as caregiver
+- **Share My Location** asks the phone for a new position and sends it as a Google Maps link through any app
+- **Profile** opens the profile and settings screen
 - **View Map & Directions** opens the Google Maps screen
 
 ### Health
-- Record blood pressure, heart rate, temperature and weight
-- Medical schedule with Taken / Pending status
-- Hydration tracker (glasses of water)
-- Symptom logging
+- Record blood pressure (mmHg), heart rate (bpm), temperature (°C) and weight (kg); readings are checked before they are saved and every saved reading is kept
+- The resident's own medicines (add, edit, remove), marked as taken or not for each day
+- Hydration tracker (glasses of water), counted per day
+- Symptom logging with notes, date and time
 
 ### Schedule
-- Day progress (for example "4 of 6 done")
-- Today's events with tick-off
-- Add new events
+- Choose the day to look at; every day has its own progress (for example "4 of 6 done") and earlier days are kept
+- Events with tick-off, edit and delete
+- Add new events with a date picker and a time picker, once or repeating every day
 
 ### Activities
 - Filter by All, Joined or Available
 - "Happening Today" and "Coming Up this Week" lists
-- Request an activity with a preferred date
+- Request an activity with a preferred date. The request is stored in Firestore, "Request sent" only appears once the server has confirmed it, and "My requests" shows whether the care team has seen it
+- Care team accounts get a list of all residents' requests (see [Firebase Setup](#firebase-setup))
 
 ### Contact
-- Quick-call list of family, doctor and nurse
-- Add new contacts
+- Quick-call list of the resident's own contacts
+- Add, edit and delete contacts
+- Choose which contact is the caregiver; the caregiver buttons call that person
 - Send quick SMS messages such as "I'm doing well" or "Please call me"
-- Caregiver on duty card with a one-tap call
+- My caregiver card with a one-tap call
+
+### Profile and settings
+- Change name and phone number (saved on the phone and in Firestore)
+- Turn on notifications (Android 13+)
+- Log out
 
 ### Google Maps
 - Map showing Neli-Rose and the resident's live location
@@ -74,7 +83,7 @@ Built by the **Ambitious Developers** student group as part of the Neli-Rose Res
 - Each device's FCM token is saved to Firestore (`users/{uid}.fcmToken`)
 - Every device subscribes to the `residents` topic for broadcast announcements
 - Notifications show while the app is open or closed
-- Android 13+ notification permission is requested at launch
+- Android 13+ notification permission is requested from **Profile and settings**
 
 ---
 
@@ -88,7 +97,7 @@ Built by the **Ambitious Developers** student group as part of the Neli-Rose Res
 | Build | Android Gradle Plugin 9.4.1, Gradle 9.6.0, version catalog |
 | Auth | Firebase Authentication, Credential Manager, Google ID |
 | Remote data | Cloud Firestore |
-| Local data | Room (SQLite) and SharedPreferences |
+| Local data | Room (SQLite) |
 | Maps and location | Maps SDK for Android, Fused Location Provider |
 | Messaging | Firebase Cloud Messaging |
 
@@ -106,6 +115,8 @@ neli-rose-android-app/
 │       │   ├── LoginActivity.kt        # Email and Google login, password reset
 │       │   ├── SignUpActivity.kt       # Account creation, saves profile to Firestore
 │       │   ├── MainActivity.kt         # Header, bottom navigation, FCM setup
+│       │   ├── ProfileActivity.kt      # Profile and settings
+│       │   ├── CareRequestsActivity.kt # Care team's list of activity requests
 │       │   ├── HomeFragment.kt         # Dashboard, emergency actions
 │       │   ├── HealthFragment.kt       # Vitals, meds, hydration, symptoms
 │       │   ├── ScheduleFragment.kt     # Daily events
@@ -115,8 +126,13 @@ neli-rose-android-app/
 │       │   ├── FcmHelper.kt            # Channel, token, topic, notifications
 │       │   ├── NeliMessagingService.kt # Receives FCM messages
 │       │   ├── CareData.kt             # Data models and DataManager
-│       │   └── db/                     # Room: entities, DAOs, database
+│       │   ├── CareLogic.kt            # Dates, vitals checks, next reminder (unit tested)
+│       │   ├── LegacyPrefsImport.kt    # One-time copy of records from the old storage
+│       │   ├── UiHelpers.kt            # Shared dialogs, pickers and formatting
+│       │   └── db/                     # Room: entities, DAOs, database, migrations
 │       └── res/                        # Layouts, drawables, colours, menu
+├── .github/workflows/blank.yml         # Builds, tests and uploads the APK
+├── firestore.rules                     # Firestore security rules (publish them in the console)
 ├── gradle/libs.versions.toml           # Dependency versions
 ├── build.gradle.kts
 └── settings.gradle.kts
@@ -143,6 +159,9 @@ neli-rose-android-app/
 
 The app ID is `NeliRose.RetirementHome`, which matches the entry in `google-services.json`.
 
+### Build in GitHub Actions
+Every push to `main` and every pull request into `main` builds the debug APK and runs the unit tests (`.github/workflows/blank.yml`). Open the finished run under **Actions** and download `neli-rose-debug-apk` from **Artifacts**. An APK built there is signed with a throw-away debug key, so Google sign-in does not work in it unless that key's SHA-1 is added in Firebase.
+
 ---
 
 ## Google Maps Setup
@@ -163,10 +182,10 @@ The map screen needs a Maps API key. Without a working key, the map area loads b
        android:value="YOUR_KEY_HERE" />
    ```
 
-**Set the real location.** In `MapActivity.kt`, `HOME` is a placeholder (Johannesburg). Replace it with Neli-Rose's real coordinates (right-click the building in Google Maps and copy the latitude and longitude):
+**Check the location.** In `MapActivity.kt`, `HOME` is set to 39 Rooihaaskoppie Avenue, East Lynne, Pretoria, using the position from a public directory listing. Confirm it against the building in Google Maps (press and hold on the building to see its latitude and longitude) and correct it if needed:
 
 ```kotlin
-private val HOME = LatLng(-26.2041, 28.0473)
+private val HOME = LatLng(-25.70374, 28.2741)
 ```
 
 **Get your SHA-1 fingerprint:**
@@ -188,17 +207,10 @@ The project already includes a `google-services.json`. If you use your own Fireb
    - **Authentication:** turn on **Email/Password** and **Google**
    - **Firestore Database:** create a database
    - **Cloud Messaging:** enabled by default
-5. Set Firestore rules so each user can only access their own document:
-   ```
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /users/{userId} {
-         allow read, write: if request.auth != null && request.auth.uid == userId;
-       }
-     }
-   }
-   ```
+5. Publish the Firestore rules from [`firestore.rules`](firestore.rules): open **Firestore Database > Rules**, paste the file's contents and press **Publish**. They let each person read and change only their own profile and activity requests, and let care team accounts read all requests.
+6. To make an account a care team account, open **Firestore Database > Data > users**, choose that person's document and add the field `role` with the value `caregiver`. That account then sees **Care team > See residents' activity requests** on its profile screen. The role cannot be set from the app.
+
+If **Email/Password** is not turned on under **Authentication > Sign-in method**, the app reports that email sign-in is not switched on and does not let anyone in.
 
 ---
 
@@ -219,15 +231,22 @@ FCM only receives messages. To send them automatically from your own logic (for 
 
 | Data | Where |
 |---|---|
-| User profile (name, phone, email) | Firestore `users/{uid}` and Room |
+| User profile (name, phone, email) | Firestore `users/{uid}` and Room (`user_profiles`) |
 | FCM token | Firestore `users/{uid}.fcmToken` |
-| Vitals, hydration, medications | Room (`vitals`, `medications`) |
-| Schedule events | Room (`schedule_events`) |
-| Activities | Room (`activities`) |
-| Contacts | Room (`contacts`) |
-| Dashboard counters | SharedPreferences |
+| Vitals (every saved reading, with its date) | Room (`vital_readings`) |
+| Hydration (one count per day) | Room (`hydration_days`) |
+| Medicines, and the days each was taken | Room (`medications`, `medication_logs`) |
+| Schedule events, and the days each was done | Room (`schedule_events`, `schedule_completions`) |
+| Symptoms (with notes, date and time) | Room (`symptom_logs`) |
+| Activities joined | Room (`activities`) |
+| Contacts, including which one is the caregiver | Room (`contacts`) |
+| Activity requests | Firestore `activityRequests` |
 
-Local data is keyed by the Firebase user ID, so each account on a device sees only its own records. `DataManager` in `CareData.kt` is the single access point for all of this.
+Room is the only place the health records are kept; SharedPreferences is no longer used for them. Local data is keyed by the Firebase user ID, so each account on a device sees only its own records, and nothing is stored when nobody is signed in. `DataManager` in `CareData.kt` is the single access point for all of this.
+
+**Updating from an earlier version.** The database upgrade (version 2 to 3) is a migration that keeps the existing records, and anything that only existed in the old SharedPreferences store is copied into Room the first time each account is used. Old "taken" and "done" marks had no date, so they are kept as old records and are not counted as today's. Old medicines and schedule events become daily items starting on the day of the update.
+
+**Still fixed in the app.** The "Happening Today" and "Coming Up this Week" activity lists are still written into the app, because there is no screen yet for staff to manage them.
 
 ---
 
@@ -260,6 +279,8 @@ Read this before pushing the project to a public repository.
 | Problem | Fix |
 |---|---|
 | Map screen is blank or grey | Check the Maps API key, that **Maps SDK for Android** is enabled, billing is linked, and the package name and SHA-1 restriction match |
+| "Email sign-in is not switched on for this app yet" | Turn on **Email/Password** under **Authentication > Sign-in method** in the Firebase console |
+| "Your request could not be sent" on the Activities screen | Publish the rules from `firestore.rules` in the Firebase console |
 | Google sign-in fails | Add your debug SHA-1 in Firebase, re-download `google-services.json`, and use an emulator image with Google Play |
 | No notification appears | Allow notifications in app settings (Android 13+), use a device with Google Play services, and check Logcat for the FCM token |
 | Token not saved to Firestore | Make sure you are logged in and your Firestore rules allow writes to `users/{uid}` |
