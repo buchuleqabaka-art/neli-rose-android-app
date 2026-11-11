@@ -1,8 +1,10 @@
-# Builds the debug APK on GitHub's servers.
+# Builds the debug APK, runs the unit tests and uploads the APK, all on
+# GitHub's servers.
 #
 # It runs for every pull request into main, for every push to main, and on
 # demand: Actions tab -> "Build Android APK" -> "Run workflow".
 # The finished run has the APK under "Artifacts", at the bottom of its page.
+# The APK is only uploaded when the build and the tests both pass.
 
 name: Build Android APK
 
@@ -18,7 +20,7 @@ permissions:
 
 jobs:
   build:
-    name: Build debug APK
+    name: Build, test and upload the APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -40,6 +42,18 @@ jobs:
 
       - name: Build the debug APK
         run: ./gradlew :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Run the unit tests
+        run: ./gradlew :app:testDebugUnitTest --no-daemon --stacktrace
+
+      - name: Upload the unit test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-test-report
+          path: app/build/reports/tests/
+          if-no-files-found: ignore
+          retention-days: 30
 
       - name: Upload the APK
         uses: actions/upload-artifact@v7
