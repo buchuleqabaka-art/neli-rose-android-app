@@ -9,29 +9,23 @@
       "client_info": {
         "mobilesdk_app_id": "1:487739624548:android:c64d08b6e604d89fede371",
         "android_client_info": {
-          "package_name": "com.example.neli_roseapp"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDgzN8OiOXE07xxYR55ypj1EJxGCRqVNZE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:487739624548:android:c64d08b6e604d89fede371",
-        "android_client_info": {
           "package_name": "NeliRose.RetirementHome"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "487739624548-2oabdlp7vs7k2o6ffo5a3n397np0lhj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "NeliRose.RetirementHome",
+            "certificate_hash": "6f4c61c6baaffbfa84c9b4abc2444adbe094586b"
+          }
+        },
+        {
+          "client_id": "487739624548-ggpdu5b15v6cbhie1rffv0lmib3gus42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDgzN8OiOXE07xxYR55ypj1EJxGCRqVNZE"
@@ -39,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487739624548-ggpdu5b15v6cbhie1rffv0lmib3gus42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
