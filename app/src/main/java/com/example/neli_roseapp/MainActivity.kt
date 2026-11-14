@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (runCatching { FirebaseAuth.getInstance().currentUser }.getOrNull() == null) {
+            startActivity(Intent(this, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            finish()
+            return
+        }
         setContentView(R.layout.activity_main)
 
         FcmHelper.createChannel(this)

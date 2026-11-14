@@ -20,17 +20,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
-
-    companion object {
-        // TODO: replace with the real Neli-Rose coordinates (right-click the building in Google Maps)
-        private val HOME = LatLng(-26.2041, 28.0473)
-        private const val HOME_NAME = "Neli-Rose Retirement Home"
-    }
 
     private var map: GoogleMap? = null
     private lateinit var fusedClient: FusedLocationProviderClient
@@ -66,10 +58,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         map = googleMap
         googleMap.uiSettings.isZoomControlsEnabled = true
 
-        // marker + camera on Neli-Rose
-        googleMap.addMarker(MarkerOptions().position(HOME).title(HOME_NAME))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(HOME, 15f))
-
         if (hasLocationPermission()) {
             enableMyLocation()
         } else {
@@ -102,19 +90,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 lastLocation = loc
                 val me = LatLng(loc.latitude, loc.longitude)
-                val bounds = LatLngBounds.Builder().include(me).include(HOME).build()
-                runCatching {
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
-                }
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(me, 15f))
             }
     }
 
     // opens Google Maps (or the browser) with turn-by-turn directions to Neli-Rose
     private fun openDirections() {
-        val uri = Uri.parse(
-            "https://www.google.com/maps/dir/?api=1&destination=${HOME.latitude},${HOME.longitude}"
-        )
-        startActivity(Intent(Intent.ACTION_VIEW, uri))
+        val uri = Uri.parse("https://www.google.com/maps/dir/").buildUpon()
+            .appendQueryParameter("api", "1")
+            .appendQueryParameter("destination", HomeDetails.ADDRESS)
+            .build()
+        runCatching { startActivity(Intent(Intent.ACTION_VIEW, uri)) }
+            .onFailure { Toast.makeText(this, "No app available to open directions", Toast.LENGTH_LONG).show() }
     }
 
     private fun shareLocation() {
@@ -130,6 +117,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         val loc = lastLocation
         if (loc == null) {
             Toast.makeText(this, "Still finding your location, try again in a moment", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (System.currentTimeMillis() - loc.time > 5 * 60 * 1000L) {
+            Toast.makeText(this, "Your location is old. Reopen the map to refresh it.", Toast.LENGTH_LONG).show()
             return
         }
         val link = "https://maps.google.com/?q=${loc.latitude},${loc.longitude}"

@@ -37,7 +37,6 @@ abstract class NeliDatabase : RoomDatabase() {
                     NeliDatabase::class.java,
                     "neli_app_database"
                 )
-                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

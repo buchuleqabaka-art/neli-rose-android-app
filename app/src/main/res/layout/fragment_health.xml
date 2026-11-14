@@ -122,8 +122,9 @@
                 app:cornerRadius="0dp" />
         </LinearLayout>
 
-        <!-- Medical Schedule Card -->
+        <!-- Hidden until medication data can be sourced from verified records. -->
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -282,18 +283,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="6 / 8 Glasses"
+                android:text="0 glasses recorded since reset"
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
 
             <ProgressBar
                 android:id="@+id/progressHydration"
+                android:visibility="gone"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
                 android:layout_marginTop="10dp"
                 android:max="8"
-                android:progress="6"
+                android:progress="0"
                 android:progressDrawable="@color/neli_green" />
 
             <com.google.android.material.button.MaterialButton
@@ -307,6 +309,17 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 app:cornerRadius="0dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResetHydration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="Reset glass counter" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A count only, not a hydration target. Follow your care team's advice."
+                android:textColor="@android:color/black" />
         </LinearLayout>
 
         <!-- Symptom Log Card -->
@@ -326,6 +339,18 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stored on this device only. This does not notify anyone or provide medical advice. For urgent symptoms, contact a healthcare professional or emergency services."
+                android:textColor="@android:color/black" />
+            <TextView
+                android:id="@+id/tvSymptomHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/black" />
+
             <Spinner
                 android:id="@+id/spinnerSymptoms"
                 android:layout_width="match_parent"
@@ -337,8 +362,9 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogSymptom"
-                android:layout_width="180dp"
-                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@color/neli_light_green"

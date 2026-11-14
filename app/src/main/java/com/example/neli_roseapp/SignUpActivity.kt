@@ -94,13 +94,9 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Save user profile locally
-            DataManager.saveUserProfile(this, name, phone, email)
-
             val firebaseAuth = auth
             if (firebaseAuth == null) {
-                Toast.makeText(this, "Account created successfully! Please log in.", Toast.LENGTH_LONG).show()
-                goToLogin()
+                Toast.makeText(this, "Sign-up is unavailable. Please contact support.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
@@ -112,6 +108,7 @@ class SignUpActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val user = firebaseAuth.currentUser
                         if (user != null) {
+                            DataManager.saveUserProfile(this, name, phone, email)
                             // save the name on the auth profile
                             val profile = UserProfileChangeRequest.Builder()
                                 .setDisplayName(name)
@@ -147,10 +144,9 @@ class SignUpActivity : AppCompatActivity() {
                         } else if (excMessage.contains("CONFIGURATION_NOT_FOUND", ignoreCase = true)) {
                             Toast.makeText(
                                 this,
-                                "Account created successfully! Please log in.",
+                                "Sign-up is not configured. Please contact support.",
                                 Toast.LENGTH_LONG
                             ).show()
-                            goToLogin()
                         } else {
                             Toast.makeText(
                                 this,

@@ -81,7 +81,10 @@ class ContactFragment : Fragment() {
         }
 
         // Direct call for caregiver nurse
-        btnCallNurse.setOnClickListener { ctx.dial(CareData.nurse.phone) }
+        btnCallNurse.setOnClickListener { ctx.dial(HomeDetails.PRIMARY_PHONE) }
+        view.findViewById<Button>(R.id.btnCallHomeAlternative).setOnClickListener {
+            ctx.dial(HomeDetails.SECONDARY_PHONE)
+        }
 
         // Quick message toggle buttons
         btnQuickMsg1.setOnClickListener {
@@ -161,8 +164,8 @@ class ContactFragment : Fragment() {
                 setImageResource(R.drawable.ic_contact)
                 contentDescription = "Call ${contact.name}"
                 val lp = RelativeLayout.LayoutParams(
-                    (32 * resources.displayMetrics.density).toInt(),
-                    (32 * resources.displayMetrics.density).toInt()
+                    (48 * resources.displayMetrics.density).toInt(),
+                    (48 * resources.displayMetrics.density).toInt()
                 )
                 lp.addRule(RelativeLayout.ALIGN_PARENT_END)
                 lp.addRule(RelativeLayout.CENTER_VERTICAL)

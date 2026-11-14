@@ -189,7 +189,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Caregiver on Duty"
+                android:text="Neli-Rose contact"
                 android:textColor="@android:color/black"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -198,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Nurse Thandi Dlamini"
+                android:text="+27 61 584 8341 / +27 84 587 3631"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -206,9 +206,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="On shift until 20:00"
+                android:text="Opens your phone app; these are home contact numbers."
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="colette@nelirose.co.za\nVisiting: Mon–Fri 09:00–18:00; Sat–Sun 10:00–16:00"
+                android:textColor="@android:color/black" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCallNurse"
@@ -216,10 +223,18 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@color/neli_grey"
-                android:text="Call Nurse Thandi"
+                android:text="Call +27 61 584 8341"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 app:cornerRadius="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCallHomeAlternative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:layout_marginTop="8dp"
+                android:text="Call +27 84 587 3631" />
         </LinearLayout>
 
     </LinearLayout>
