@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neli_cream"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="88dp"
+        android:background="@color/neli_green"
+        android:padding="16dp">
+        <ImageView
+            android:id="@+id/btnSettingsBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/settings_back"
+            android:padding="8dp"
+            android:src="@drawable/ic_back_triangle" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/settings_title"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" android:background="@drawable/bg_card"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView style="@style/NeliSettingsHeading" android:text="@string/settings_profile" />
+                <TextView style="@style/NeliSettingsNote" android:text="@string/settings_profile_note" />
+                <EditText android:id="@+id/etSettingsName" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:minHeight="52dp" android:layout_marginTop="12dp"
+                    android:autofillHints="name" android:background="@color/neli_box_bg"
+                    android:hint="@string/settings_name_hint" android:inputType="textPersonName|textCapWords"
+                    android:paddingStart="12dp" android:paddingEnd="12dp" android:textColor="@color/neli_text_dark"
+                    android:textColorHint="@color/neli_text_hint" android:textSize="16sp" />
+                <EditText android:id="@+id/etSettingsPhone" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:minHeight="52dp" android:layout_marginTop="10dp"
+                    android:autofillHints="phone" android:background="@color/neli_box_bg"
+                    android:hint="@string/settings_phone_hint" android:inputType="phone"
+                    android:paddingStart="12dp" android:paddingEnd="12dp" android:textColor="@color/neli_text_dark"
+                    android:textColorHint="@color/neli_text_hint" android:textSize="16sp" />
+                <TextView style="@style/NeliSettingsNote" android:text="@string/settings_email_label" />
+                <TextView android:id="@+id/tvSettingsEmail" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:textColor="@color/neli_text_dark" android:textSize="16sp" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSaveProfile"
+                    style="@style/NeliSettingsButton" android:text="@string/settings_save_profile" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" android:background="@drawable/bg_card"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView style="@style/NeliSettingsHeading" android:text="@string/settings_display" />
+                <TextView style="@style/NeliSettingsNote" android:text="@string/settings_display_note" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnDisplaySettings"
+                    style="@style/NeliSettingsButtonSecondary" android:text="@string/settings_open_display" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" android:background="@drawable/bg_card"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView style="@style/NeliSettingsHeading" android:text="@string/settings_notifications" />
+                <TextView android:id="@+id/tvNotificationStatus" style="@style/NeliSettingsNote" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnNotificationSettings"
+                    style="@style/NeliSettingsButtonSecondary" android:text="@string/settings_manage_notifications" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" android:background="@drawable/bg_card"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView style="@style/NeliSettingsHeading" android:text="@string/settings_care_team" />
+                <TextView style="@style/NeliSettingsNote" android:text="@string/settings_care_unavailable" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" android:background="@drawable/bg_card"
+                android:orientation="vertical" android:padding="16dp">
+                <TextView style="@style/NeliSettingsHeading" android:text="@string/settings_account" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnChangePassword"
+                    style="@style/NeliSettingsButtonSecondary" android:text="@string/settings_change_password" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnViewData"
+                    style="@style/NeliSettingsButtonSecondary" android:text="@string/settings_view_data" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSettingsLogout"
+                    style="@style/NeliSettingsButton" android:text="@string/settings_logout" />
+            </LinearLayout>
+            <TextView android:id="@+id/tvVersion" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:gravity="center" android:paddingBottom="16dp"
+                android:textColor="@color/neli_text_hint" android:textSize="13sp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

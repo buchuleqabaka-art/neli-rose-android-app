@@ -96,6 +96,12 @@ Android SDK and the required Gradle dependencies installed.
 - Send quick SMS messages such as "I'm doing well" or "Please call me"
 - Call either of the supplied home contact numbers
 
+### Settings
+- Open Settings using the gear in the top header; logout is now inside Settings.
+- Edit the name and phone displayed on this device. These changes are not synced to the care team.
+- Open Android display and notification settings, request an email/password reset, and review locally saved vitals.
+- Care-team announcements and API integration are not connected yet.
+
 ### Google Maps
 - Map showing the resident's location when permission is granted
 - Directions search by the supplied address; confirm the destination in the maps app
