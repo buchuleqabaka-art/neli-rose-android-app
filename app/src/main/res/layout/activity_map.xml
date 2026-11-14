@@ -65,7 +65,7 @@
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:cornerRadius="0dp" />
+            app:cornerRadius="12dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMapShare"
@@ -77,6 +77,6 @@
             android:textColor="@color/neli_green"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:cornerRadius="0dp" />
+            app:cornerRadius="12dp" />
     </LinearLayout>
 </LinearLayout>
