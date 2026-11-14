@@ -50,6 +50,12 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="39 Rooihaaskoppie Ave, East Lynne, Pretoria, 0186. Check the destination in your maps app."
+            android:textColor="@android:color/black" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDirections"
             android:layout_width="match_parent"

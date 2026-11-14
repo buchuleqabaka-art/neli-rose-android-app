@@ -110,16 +110,13 @@ class HomeFragment : Fragment() {
         }
         val greeting = "$greetingPrefix, $userName"
         val date = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(Date())
-        val minsToMeds = 14 * 60 - (hour * 60 + now.get(Calendar.MINUTE))
-        val reminderIn = if (minsToMeds > 0) "${(minsToMeds + 59) / 60}h" else "Due"
+        val reminderIn = "Unavailable"
 
         tvGreeting.text = greeting
         tvDate.text = date
         tvReminderIn.text = reminderIn
 
-        btnCallCaregiver.setOnClickListener {
-            requireContext().dial(CareData.nurse.phone)
-        }
+        btnCallCaregiver.setOnClickListener { ctx.dial(HomeDetails.PRIMARY_PHONE) }
 
         btnShareLocation.setOnClickListener {
             val fine = ContextCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -146,6 +143,10 @@ class HomeFragment : Fragment() {
             .maxByOrNull { it.time }
         if (loc == null) {
             Toast.makeText(ctx, "Could not find your location. Turn on GPS and try again.", Toast.LENGTH_LONG).show()
+            return
+        }
+        if (System.currentTimeMillis() - loc.time > 5 * 60 * 1000L) {
+            Toast.makeText(ctx, "Your last location is old. Open the map and try again.", Toast.LENGTH_LONG).show()
             return
         }
         val link = "https://maps.google.com/?q=${loc.latitude},${loc.longitude}"

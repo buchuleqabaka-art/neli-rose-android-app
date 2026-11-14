@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/white"
                 android:gravity="center"
-                android:text="Joined"
+                android:text="Interested"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -55,7 +55,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/white"
                 android:gravity="center"
-                android:text="Available"
+                android:text="Not marked"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -88,6 +88,7 @@
 
         <!-- Coming Up This Week Card -->
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -146,6 +147,11 @@
             android:padding="16dp">
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sharing opens another app. Nothing is sent until you choose a recipient and send it."
+                android:textColor="@android:color/black" />
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Request an activity"
@@ -198,7 +204,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@color/neli_light_green"
-                android:text="Send Request"
+                android:text="Share request"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 app:cornerRadius="0dp" />
