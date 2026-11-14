@@ -76,8 +76,25 @@ object DataManager {
     fun getUserName(context: Context): String {
         val firebaseUser = runCatching { FirebaseAuth.getInstance().currentUser }.getOrNull()
         val savedName = getPrefs(context).getString("${getUserKey()}_name", null)
-        val rawName = savedName ?: firebaseUser?.displayName ?: firebaseUser?.email?.substringBefore("@") ?: "User"
+        val localName = getPrefs(context).getString("${getUserKey()}_settings_name", null)
+        val rawName = localName ?: savedName ?: firebaseUser?.displayName ?: firebaseUser?.email?.substringBefore("@") ?: "User"
         return capitalizeWords(rawName)
+    }
+
+    // User-edited profile is device-only and survives sign-in profile refreshes.
+    fun getSettingsPhone(context: Context): String {
+        val prefs = getPrefs(context)
+        val key = getUserKey()
+        return prefs.getString("${key}_settings_phone", null)
+            ?: prefs.getString("${key}_phone", "") ?: ""
+    }
+
+    fun saveSettingsProfile(context: Context, name: String, phone: String): Boolean {
+        val key = getUserKey()
+        return getPrefs(context).edit()
+            .putString("${key}_settings_name", name)
+            .putString("${key}_settings_phone", phone)
+            .commit()
     }
 
     // --- Vitals & Hydration (Room + SharedPreferences) ---

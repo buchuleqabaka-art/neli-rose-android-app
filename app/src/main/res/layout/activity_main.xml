@@ -71,14 +71,14 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/btnHeaderLogout"
+            android:id="@+id/btnHeaderSettings"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="8dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:contentDescription="Log Out"
-            android:src="@drawable/ic_logout" />
+            android:contentDescription="@string/settings_title"
+            android:src="@drawable/ic_settings" />
     </RelativeLayout>
 
     <!-- Content Fragment Container -->

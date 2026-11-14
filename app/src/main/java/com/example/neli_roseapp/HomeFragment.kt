@@ -134,6 +134,17 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val greeting = when {
+            hour < 12 -> "Good morning"
+            hour < 18 -> "Good afternoon"
+            else -> "Good evening"
+        }
+        view?.findViewById<TextView>(R.id.tvGreeting)?.text = "$greeting, ${DataManager.getUserName(requireContext())}"
+    }
+
     @SuppressLint("MissingPermission")
     private fun shareLocation() {
         val ctx = requireContext()
