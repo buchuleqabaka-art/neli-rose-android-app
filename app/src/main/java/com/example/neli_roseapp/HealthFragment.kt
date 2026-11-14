@@ -1,8 +1,6 @@
 package com.example.neli_roseapp
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import java.text.DateFormat
+import java.util.Date
 
 class HealthFragment : Fragment() {
 
@@ -57,29 +57,23 @@ class HealthFragment : Fragment() {
         etTemp.setText(vitalsMap["temp"])
         etWeight.setText(vitalsMap["weight"])
 
-        val vitalsWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                DataManager.saveVitals(
-                    ctx,
-                    etBP.text.toString().trim(),
-                    etHR.text.toString().trim(),
-                    etTemp.text.toString().trim(),
-                    etWeight.text.toString().trim()
-                )
-            }
-        }
-        listOf(etBP, etHR, etTemp, etWeight).forEach { it.addTextChangedListener(vitalsWatcher) }
-
         btnSaveVitals.setOnClickListener {
             val bp = etBP.text.toString().trim()
             val hr = etHR.text.toString().trim()
             val temp = etTemp.text.toString().trim()
             val weight = etWeight.text.toString().trim()
 
-            DataManager.saveVitals(ctx, bp, hr, temp, weight)
-            Toast.makeText(ctx, "Vitals saved successfully!", Toast.LENGTH_SHORT).show()
+            val errors = VitalsValidation.errors(bp, hr, temp, weight)
+            etBP.error = errors["bp"]
+            etHR.error = errors["hr"]
+            etTemp.error = errors["temp"]
+            etWeight.error = errors["weight"]
+            if (errors.isNotEmpty()) return@setOnClickListener
+            if (DataManager.saveVitals(ctx, bp, hr, temp, weight)) {
+                Toast.makeText(ctx, "Vitals saved on this device", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(ctx, "Could not save vitals. Please try again.", Toast.LENGTH_LONG).show()
+            }
         }
 
         val btnMed1 = view.findViewById<Button>(R.id.btnMed1)
@@ -109,23 +103,37 @@ class HealthFragment : Fragment() {
             }
         }
 
-        // Hydration tracker
+        // This is a manually reset counter, not a prescribed hydration goal.
         updateHydration(tvHydrationProgressText, progressHydration)
         btnAddGlass.setOnClickListener {
-            if (glasses < 8) {
+            if (glasses < 999) {
                 glasses++
                 updateHydration(tvHydrationProgressText, progressHydration)
                 DataManager.saveHydration(ctx, glasses)
-            } else {
-                Toast.makeText(ctx, "Daily goal reached!", Toast.LENGTH_SHORT).show()
             }
         }
+        view.findViewById<Button>(R.id.btnResetHydration).setOnClickListener {
+            glasses = 0
+            DataManager.saveHydration(ctx, glasses)
+            updateHydration(tvHydrationProgressText, progressHydration)
+        }
 
-        // Symptom logger
+        val symptomHistory = view.findViewById<TextView>(R.id.tvSymptomHistory)
+        fun renderSymptoms() {
+            val entries = DataManager.getSymptoms(ctx)
+            symptomHistory.text = if (entries.isEmpty()) "No symptoms recorded on this device."
+            else entries.take(10).joinToString("\n") { (name, time) ->
+                "${DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(time))}: $name"
+            }
+        }
+        renderSymptoms()
         btnLogSymptom.setOnClickListener {
-            val selectedSymptom = spinnerSymptoms.selectedItem?.toString()
-            if (selectedSymptom != null) {
-                Toast.makeText(ctx, "Logged: $selectedSymptom", Toast.LENGTH_SHORT).show()
+            val selected = spinnerSymptoms.selectedItem?.toString() ?: return@setOnClickListener
+            if (DataManager.addSymptom(ctx, selected, System.currentTimeMillis())) {
+                renderSymptoms()
+                Toast.makeText(ctx, "Saved on this device only. No one was notified.", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(ctx, "Could not save symptom. Please try again.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -144,7 +152,7 @@ class HealthFragment : Fragment() {
     }
 
     private fun updateHydration(tvText: TextView, progressBar: ProgressBar) {
-        tvText.text = "$glasses / 8 Glasses"
-        progressBar.progress = glasses
+        tvText.text = "$glasses glasses recorded since reset"
+        progressBar.progress = glasses.coerceAtMost(progressBar.max)
     }
 }

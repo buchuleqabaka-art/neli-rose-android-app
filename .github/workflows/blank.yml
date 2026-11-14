@@ -28,7 +28,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: "platform-tools platforms;android-37"
+          packages: "platform-tools platforms;android-36"
           log-accepted-android-sdk-licenses: "false"
 
       - name: Set up Gradle
@@ -36,9 +36,6 @@ jobs:
 
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
-
-      - name: Run lint and unit tests
-        run: ./gradlew lintDebug testDebugUnitTest
 
       - name: Build debug APK
         run: ./gradlew assembleDebug
@@ -50,6 +47,9 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Run lint and unit tests
+        run: ./gradlew lintDebug testDebugUnitTest
 
       - name: Upload test and lint reports
         if: always()

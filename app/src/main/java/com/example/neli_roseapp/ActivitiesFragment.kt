@@ -1,6 +1,7 @@
 package com.example.neli_roseapp
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,15 +75,22 @@ class ActivitiesFragment : Fragment() {
             dialog.show()
         }
 
+        btnSend.text = "Share request"
         btnSend.setOnClickListener {
-            val req = etRequest.text.toString().trim()
-            if (req.isBlank()) {
+            val request = etRequest.text.toString().trim()
+            if (request.isBlank()) {
                 Toast.makeText(ctx, "Type what you would like to do", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(ctx, "Request sent to the care team", Toast.LENGTH_SHORT).show()
-                etRequest.text.clear()
-                tvDate.text = "Select Date"
+                return@setOnClickListener
             }
+            val date = tvDate.text.toString()
+            val message = "Activity request: $request" +
+                if (date == "Select Date") "" else "\nPreferred date: $date"
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, message)
+            }
+            runCatching { startActivity(Intent.createChooser(intent, "Share activity request")) }
+                .onFailure { Toast.makeText(ctx, "No sharing app available", Toast.LENGTH_LONG).show() }
         }
 
         renderActivities()
@@ -128,7 +136,7 @@ class ActivitiesFragment : Fragment() {
 
             text1.text = "${activity.time}  -  ${activity.name}"
             text1.textSize = 15f
-            text2.text = "${activity.place}   [${if (activity.joined) "Joined" else "Tap to Join"}]"
+            text2.text = "${activity.place}   [${if (activity.joined) "Interested (device only)" else "Tap to mark interest"}]"
             text2.textSize = 13f
 
             row.setOnClickListener {

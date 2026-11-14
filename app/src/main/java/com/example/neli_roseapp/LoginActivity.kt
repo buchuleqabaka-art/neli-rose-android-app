@@ -77,10 +77,7 @@ class LoginActivity : AppCompatActivity() {
 
             val firebaseAuth = auth
             if (firebaseAuth == null) {
-                Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show()
-                val name = email.substringBefore("@")
-                DataManager.saveUserProfile(this, name, "", email)
-                goToMain()
+                Toast.makeText(this, "Sign-in is unavailable. Please contact support.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
@@ -126,20 +123,12 @@ class LoginActivity : AppCompatActivity() {
                         val exc = task.exception
                         val excMessage = exc?.localizedMessage ?: ""
 
-                        if (excMessage.contains("CONFIGURATION_NOT_FOUND", ignoreCase = true)) {
-                            // Email/Password provider is not yet enabled in Firebase Console -> save profile & log in locally
-                            val name = email.substringBefore("@")
-                            DataManager.saveUserProfile(this@LoginActivity, name, "", email)
-                            Toast.makeText(this, "Logged in successfully!", Toast.LENGTH_SHORT).show()
-                            goToMain()
-                        } else {
-                            val message = when {
-                                exc is FirebaseAuthInvalidUserException || exc is FirebaseAuthInvalidCredentialsException ->
-                                    "Incorrect email or password"
-                                else -> exc?.localizedMessage ?: "Login failed"
-                            }
-                            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                        val message = when {
+                            excMessage.contains("CONFIGURATION_NOT_FOUND", ignoreCase = true) -> "Sign-in is not configured. Please contact support."
+                            exc is FirebaseAuthInvalidUserException || exc is FirebaseAuthInvalidCredentialsException -> "Incorrect email or password"
+                            else -> "Could not sign in. Check your connection and try again."
                         }
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                     }
                 }
         }
@@ -158,7 +147,7 @@ class LoginActivity : AppCompatActivity() {
 
             val firebaseAuth = auth
             if (firebaseAuth == null) {
-                Toast.makeText(this, "Password reset email sent to $email", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Password reset is unavailable. Please contact support.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
@@ -168,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
                 val message = when {
                     task.isSuccessful -> "Password reset email sent to $email"
                     excMessage.contains("CONFIGURATION_NOT_FOUND", ignoreCase = true) ->
-                        "Password reset email sent to $email"
+                        "Password reset is not configured. Please contact support."
                     else -> task.exception?.localizedMessage ?: "Could not send reset email"
                 }
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()

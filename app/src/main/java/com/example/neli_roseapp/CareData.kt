@@ -3,6 +3,7 @@ package com.example.neli_roseapp
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import com.example.neli_roseapp.db.ActivityEntity
 import com.example.neli_roseapp.db.ContactEntity
 import com.example.neli_roseapp.db.MedicationEntity
@@ -24,16 +25,11 @@ data class Med(val name: String, val time: String, val taken: Boolean)
 data class DayEvent(val time: String, val title: String, val note: String = "", val done: Boolean = false)
 data class TodayActivity(val time: String, val name: String, val place: String, val joined: Boolean = false)
 
-object CareData {
-    val sarah = CareContact("Sarah (Daughter)", "+27 82 111 233")
-    val doctor = CareContact("Dr. Mokoena", "+27 11 555 7788")
-    val nurse = CareContact("Nurse Thandi Dlamini", "+27 11 555 0000")
-}
-
 // Opens the phone dialer with the number filled in
 fun Context.dial(number: String) {
     val clean = number.filter { it.isDigit() || it == '+' }
-    startActivity(Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", clean, null)))
+    runCatching { startActivity(Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", clean, null))) }
+        .onFailure { Toast.makeText(this, "No phone app is available", Toast.LENGTH_LONG).show() }
 }
 
 // DataManager persists state using Room Database + SharedPreferences hand-in-hand
@@ -85,15 +81,16 @@ object DataManager {
     }
 
     // --- Vitals & Hydration (Room + SharedPreferences) ---
-    fun saveVitals(context: Context, bp: String, hr: String, temp: String, weight: String) {
+    fun saveVitals(context: Context, bp: String, hr: String, temp: String, weight: String): Boolean {
         val key = getUserKey()
         val currentGlasses = getHydration(context)
-        getPrefs(context).edit()
+        val saved = getPrefs(context).edit()
             .putString("${key}_bp", bp)
             .putString("${key}_hr", hr)
             .putString("${key}_temp", temp)
             .putString("${key}_weight", weight)
-            .apply()
+            .commit()
+        if (!saved) return false
 
         scope.launch {
             runCatching {
@@ -107,8 +104,9 @@ object DataManager {
                         hydrationGlasses = currentGlasses
                     )
                 )
-            }
+            }.onFailure { android.util.Log.e("DataManager", "Could not mirror vitals to database", it) }
         }
+        return true
     }
 
     fun getVitals(context: Context): Map<String, String> {
@@ -144,7 +142,28 @@ object DataManager {
     }
 
     fun getHydration(context: Context): Int {
-        return getPrefs(context).getInt("${getUserKey()}_glasses", 6)
+        return getPrefs(context).getInt("${getUserKey()}_glasses", 0)
+    }
+
+    // Symptoms stay on this device and are never sent to the care team.
+    fun getSymptoms(context: Context): List<Pair<String, Long>> {
+        val json = getPrefs(context).getString("${getUserKey()}_symptoms", null) ?: return emptyList()
+        return runCatching {
+            val array = JSONArray(json)
+            (0 until array.length()).map { i ->
+                val item = array.getJSONObject(i)
+                item.getString("name") to item.getLong("time")
+            }
+        }.getOrDefault(emptyList())
+    }
+
+    fun addSymptom(context: Context, name: String, time: Long): Boolean {
+        val items = (listOf(name to time) + getSymptoms(context)).take(100)
+        val array = JSONArray()
+        items.forEach { (symptom, recordedAt) ->
+            array.put(JSONObject().put("name", symptom).put("time", recordedAt))
+        }
+        return getPrefs(context).edit().putString("${getUserKey()}_symptoms", array.toString()).commit()
     }
 
     // --- Medications (Room + SharedPreferences) ---
@@ -171,27 +190,14 @@ object DataManager {
     }
 
     fun getMeds(context: Context): List<Med> {
-        val json = getPrefs(context).getString("${getUserKey()}_meds", null)
-        if (json.isNullOrBlank()) {
-            return listOf(
-                Med("Metformin 500mg", "Morning 08:00", true),
-                Med("Vitamin D + Calcium", "Afternoon 14:00", true),
-                Med("Amlodipine 5mg", "Evening 20:00", false)
-            )
-        }
-        val list = mutableListOf<Med>()
-        runCatching {
+        val json = getPrefs(context).getString("${getUserKey()}_meds", null) ?: return emptyList()
+        return runCatching {
             val array = JSONArray(json)
-            for (i in 0 until array.length()) {
+            (0 until array.length()).map { i ->
                 val obj = array.getJSONObject(i)
-                list.add(Med(obj.getString("name"), obj.getString("time"), obj.getBoolean("taken")))
+                Med(obj.getString("name"), obj.getString("time"), obj.getBoolean("taken"))
             }
-        }
-        return if (list.isNotEmpty()) list else listOf(
-            Med("Metformin 500mg", "Morning 08:00", true),
-            Med("Vitamin D + Calcium", "Afternoon 14:00", true),
-            Med("Amlodipine 5mg", "Evening 20:00", false)
-        )
+        }.getOrDefault(emptyList())
     }
 
     // --- Schedule Events (Room + SharedPreferences) ---
@@ -220,16 +226,7 @@ object DataManager {
 
     fun getScheduleEvents(context: Context): List<DayEvent> {
         val json = getPrefs(context).getString("${getUserKey()}_events", null)
-        if (json.isNullOrBlank()) {
-            return listOf(
-                DayEvent("07:00", "Wake up & Morning Routine", done = true),
-                DayEvent("08:00", "Breakfast", done = true),
-                DayEvent("10:00", "Morning Exercise", done = true),
-                DayEvent("13:00", "Lunch", done = true),
-                DayEvent("14:00", "Afternoon Medication"),
-                DayEvent("18:00", "Dinner")
-            )
-        }
+        if (json.isNullOrBlank()) return emptyList()
         val list = mutableListOf<DayEvent>()
         runCatching {
             val array = JSONArray(json)
@@ -245,14 +242,7 @@ object DataManager {
                 )
             }
         }
-        return if (list.isNotEmpty()) list else listOf(
-            DayEvent("07:00", "Wake up & Morning Routine", done = true),
-            DayEvent("08:00", "Breakfast", done = true),
-            DayEvent("10:00", "Morning Exercise", done = true),
-            DayEvent("13:00", "Lunch", done = true),
-            DayEvent("14:00", "Afternoon Medication"),
-            DayEvent("18:00", "Dinner")
-        )
+        return list
     }
 
     // --- Activities (Room + SharedPreferences) ---
@@ -281,12 +271,7 @@ object DataManager {
 
     fun getActivities(context: Context): List<TodayActivity> {
         val json = getPrefs(context).getString("${getUserKey()}_activities", null)
-        if (json.isNullOrBlank()) {
-            return listOf(
-                TodayActivity("15:00", "Garden Walk", "Outdoor Garden"),
-                TodayActivity("16:00", "Crafts and knitting", "Crafts Room")
-            )
-        }
+        if (json.isNullOrBlank()) return emptyList()
         val list = mutableListOf<TodayActivity>()
         runCatching {
             val array = JSONArray(json)
@@ -302,10 +287,7 @@ object DataManager {
                 )
             }
         }
-        return if (list.isNotEmpty()) list else listOf(
-            TodayActivity("15:00", "Garden Walk", "Outdoor Garden"),
-            TodayActivity("16:00", "Crafts and knitting", "Crafts Room")
-        )
+        return list
     }
 
     // --- Contacts (Room + SharedPreferences) ---
@@ -332,9 +314,10 @@ object DataManager {
 
     fun getContacts(context: Context): List<CareContact> {
         val json = getPrefs(context).getString("${getUserKey()}_contacts", null)
-        val defaultContacts = listOf(CareData.sarah, CareData.doctor, CareData.nurse)
+        // Previously shipped example contacts must not be offered as real care contacts.
+        val samplePhones = setOf("+2782111233", "+27115557788", "+27115550000")
         if (json.isNullOrBlank()) {
-            return defaultContacts
+            return emptyList()
         }
         val list = mutableListOf<CareContact>()
         runCatching {
@@ -344,7 +327,7 @@ object DataManager {
                 list.add(CareContact(obj.getString("name"), obj.getString("phone")))
             }
         }
-        return if (list.isNotEmpty()) list else defaultContacts
+        return list.filterNot { contact -> contact.phone.filter { it.isDigit() || it == '+' } in samplePhones }
     }
 
     // --- Stat Counts ---
