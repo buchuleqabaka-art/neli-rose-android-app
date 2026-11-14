@@ -14,11 +14,13 @@
         <!-- green header -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
+            android:minHeight="220dp"
             android:background="@color/neli_green"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingTop="24dp">
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp">
 
             <ImageView
                 android:layout_width="64dp"
@@ -76,7 +78,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                android:text="Email address"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -122,6 +124,8 @@
                 android:id="@+id/tvForgot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:gravity="center_vertical"
                 android:layout_gravity="end"
                 android:layout_marginTop="4dp"
                 android:padding="4dp"
@@ -131,8 +135,9 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
-                android:layout_width="220dp"
-                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/neli_green"
@@ -140,12 +145,13 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:cornerRadius="0dp" />
+                app:cornerRadius="12dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoogleSignIn"
-                android:layout_width="220dp"
-                android:layout_height="56dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="@android:color/white"
@@ -155,7 +161,7 @@
                 android:textStyle="bold"
                 app:strokeColor="@color/neli_green"
                 app:strokeWidth="1dp"
-                app:cornerRadius="0dp" />
+                app:cornerRadius="12dp" />
         </LinearLayout>
 
         <!-- sign up link -->
@@ -178,6 +184,8 @@
                 android:id="@+id/tvSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:gravity="center"
                 android:padding="4dp"
                 android:text="Sign Up"
                 android:textColor="@color/neli_green"

@@ -19,8 +19,9 @@
 
         <ImageView
             android:id="@+id/btnHeaderBack"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:contentDescription="Back"
@@ -71,8 +72,9 @@
 
         <ImageView
             android:id="@+id/btnHeaderLogout"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:contentDescription="Log Out"
@@ -92,6 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/neli_green"
+        app:labelVisibilityMode="labeled"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@android:color/white"
         app:menu="@menu/bottom_nav_menu" />

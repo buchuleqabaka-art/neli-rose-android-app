@@ -88,7 +88,7 @@
                 android:text="Add Contact"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                app:cornerRadius="12dp" />
         </LinearLayout>
 
         <!-- Send a Message Card -->
@@ -150,7 +150,7 @@
                     android:text="I'm doing well"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
-                    app:cornerRadius="0dp" />
+                    app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnQuickMsg2"
@@ -162,7 +162,7 @@
                     android:text="Please call me"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
-                    app:cornerRadius="0dp" />
+                    app:cornerRadius="12dp" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -174,7 +174,7 @@
                 android:text="Send Message"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                app:cornerRadius="12dp" />
         </LinearLayout>
 
         <!-- Caregiver on Duty Card -->
@@ -226,7 +226,7 @@
                 android:text="Call +27 61 584 8341"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:cornerRadius="0dp" />
+                app:cornerRadius="12dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCallHomeAlternative"
